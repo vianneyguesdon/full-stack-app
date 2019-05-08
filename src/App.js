@@ -7,6 +7,8 @@ import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import styled from "styled-components";
+import { Provider } from "react-redux";
+import store from "./store";
 
 const Container = styled.div`
   height: 100vh;
@@ -15,15 +17,17 @@ const Container = styled.div`
 class App extends React.Component {
   render() {
     return (
-      <Router>
-        <Container>
-          <Navbar />
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
-          <Footer />
-        </Container>
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <Container>
+            <Navbar />
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <Footer />
+          </Container>
+        </Router>
+      </Provider>
     );
   }
 }

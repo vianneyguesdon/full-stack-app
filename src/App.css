@@ -48,6 +48,7 @@ img {
   height: 50px;
   width: 50px;
   margin-top: -592px;
+  margin-right: -60px;
   z-index: 1;
   animation: btc-move 6s ease-in-out 0s infinite alternate;
 }
