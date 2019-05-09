@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware, compose } from "redux";
+// THunk : middleware impératif pour les opérations asynchrones
 import thunk from "redux-thunk";
 import rootReducer from "./reducers";
 

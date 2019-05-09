@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import classNames from "classnames";
-import axios from "axios";
+// import axios from "axios";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { loginUser } from "../../actions/authActions";
 
 const LoginContainer = styled.div`
   min-height: 72vh;
@@ -19,6 +22,22 @@ class Login extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  // Redirection if logged in
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   onChange(event) {
     this.setState({
       [event.target.name]: event.target.value
@@ -28,19 +47,12 @@ class Login extends React.Component {
   onSubmit(event) {
     event.preventDefault();
 
-    const user = {
+    const userData = {
       email: this.state.email,
       password: this.state.password
     };
 
-    axios
-      .post("/api/users/login", user)
-      .then(res => console.log(res.data))
-      .catch(err =>
-        this.setState({
-          errors: err.response.data
-        })
-      );
+    this.props.loginUser(userData);
   }
 
   render() {
@@ -55,7 +67,7 @@ class Login extends React.Component {
               <p className="lead text-center">
                 Sign in to your Skilters account
               </p>
-              <form onSubmit={this.onSubmit}>
+              <form noValidate onSubmit={this.onSubmit}>
                 <div className="form-group">
                   <input
                     type="email"
@@ -96,4 +108,18 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(Login);
